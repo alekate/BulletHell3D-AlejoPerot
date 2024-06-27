@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BulletPool : MonoBehaviour
 {
-    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] public GameObject bulletPrefab;
     [SerializeField] private int poolSize = 10;
-    [SerializeField] private List<GameObject> bulletList = new List<GameObject>(); // Initialize the list
+    [SerializeField] private List<GameObject> bulletList = new List<GameObject>(); // Inicializar la lista. En vez de listas se puede usar Queue y Stack
 
     // Singleton
     private static BulletPool instance;
@@ -24,15 +24,14 @@ public class BulletPool : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        AddBulletsToPool(poolSize); // poolSize is passed as "amount"
+        AddBulletsToPool(poolSize); // poolSize se pasa como "amount"
     }
 
-    private void AddBulletsToPool(int amount) // amount because it counts the instances added to the list
+    private void AddBulletsToPool(int amount) // amount porque cuenta las instancias agregadas a la lista
     {
-        // Instantiate the bullet prefabs and add them to the pool
+        // Instanciar los prefabs de balas y añadirlos a la pool
         for (int i = 0; i < amount; i++)
         {
             GameObject bullet = Instantiate(bulletPrefab);
@@ -44,14 +43,20 @@ public class BulletPool : MonoBehaviour
 
     public GameObject RequestBullet()
     {
-        for (int i = 0; i < bulletList.Count; i++) // Changed laserList to bulletList
+        for (int i = 0; i < bulletList.Count; i++) 
         {
-            if (!bulletList[i].activeSelf) // Verifies if the element in the list is NOT active (uses !)
+            if (!bulletList[i].activeSelf) // Verifica si el elemento en la lista NO está activo (usa !)
             {
-                bulletList[i].SetActive(true); // Activates it
-                return bulletList[i]; // Returns it
+                bulletList[i].SetActive(true); // Lo activa
+                return bulletList[i]; // Lo devuelve
             }
         }
-        return null; // Moved return statement outside the loop
+        return null; // Mover la declaración return fuera del bucle
+    }
+
+    public void ReturnBullet(GameObject bullet)
+    {
+        bullet.SetActive(false);
+        Debug.Log("returned");
     }
 }

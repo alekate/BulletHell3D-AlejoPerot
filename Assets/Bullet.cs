@@ -6,10 +6,12 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private float bulletSpeed = 5f;
     [SerializeField] private Rigidbody bulletRB;
+    [SerializeField]  BulletPool bulletPool;
 
     // Start is called before the first frame update
     void Start()
     {
+        bulletPool = BulletPool.Instance; // CHATGPT instancio el Singelton
     }
 
     // Update is called once per frame
@@ -24,11 +26,9 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponent<Bullet>() == null)
-        {
-            gameObject.SetActive(false);
-            //crear metodo que return la bullet en pool script
-        }
+        Debug.Log("se devuelve bullet");
+
+        bulletPool.ReturnBullet(gameObject); // Pasar esta bala al BulletPool para ser reciclada
         
     }
 }
